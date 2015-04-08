@@ -6,9 +6,10 @@ mixin post(post)
 
 mixin post2(post)
 	.post(data-ks-editable=editable(user, { list: 'Post', id: post.id }))
-		h4: a(href='/blog/post/' + post.slug)= post.enquiryType
-		h4: a(href='/blog/post/' + post.slug)= post.email
-		h4: a(href='/blog/post/' + post.slug)= post.createdAt
+		h4: p= post.enquiryType
+		h4: p= post.email
+		h4: p= post.phone
+		h4: p= post.createdAt
 		h4: a(href='/blog/post/' + post.slug)= post.message.md
 		h4: a(href='/blog/post/' + post.slug)= post.name.last
 		h4: a(href='/blog/post/' + post.slug)= post.name.first		
@@ -39,8 +40,14 @@ block content
 						each post in data.posts.results
 							h4 Inschrijving
 							h5 #{user.email}
+							h3: p= post.enquiryType
+							h4: p= post.email
+							h4: p= post.phone
+							h4: p= post.createdAt
+							h4: p= post.message.md
+							h4: p= post.name.last
+							h4: p= post.name.first
 							+post2(post)
-							
 					
 					if data.posts.totalPages > 1
 						ul.pagination
