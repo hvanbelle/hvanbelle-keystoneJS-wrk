@@ -36,18 +36,16 @@ block content
 					else
 						h4.text-weight-normal Showing.... #{utils.plural(data.posts.results.length, '* post')}.
 					.blog
-						h4 #{data.posts.enquiryType}
+						h5 Inschrijving
+						h5 #{user.email}
 						each post in data.posts.results
-							h4 Inschrijving
-							h5 #{user.email}
 							h3: p= post.enquiryType
 							h4: p= post.email
 							h4: p= post.phone
 							h4: p= post.createdAt
 							h4: p= post.message.md
 							h4: p= post.name.last
-							h4: p= post.name.first
-							+post2(post)
+							h4: p= post.name.first							
 					
 					if data.posts.totalPages > 1
 						ul.pagination
