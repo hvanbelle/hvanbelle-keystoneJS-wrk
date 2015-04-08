@@ -18,9 +18,18 @@ exports = module.exports = function(req, res) {
 	
 	// Get the email of the logged on user
 	//var ses_email = req.session.email = req.param('email');
-	var ses_email = req.body.signin_email;
+	//var ses_email = req.body.signin_email;
 	//var ses_email = req.email;
+	//var ses_email = req.body.email;
+	//var ses_email = req.body.userId;
+	var ses_email = req.user.email;
 	console.log('ses-email: %s', ses_email);
+	/*
+	List.schema.pre('save', function(next, done) {
+			console.log('current user =>', this._user);
+			next();
+    });
+	*/
 	
 	// Load all categories
 	view.on('init', function(next) {
@@ -102,7 +111,7 @@ exports = module.exports = function(req, res) {
 				perPage: 10,
 				maxPages: 10
 			})
-			.where('email', 'elvanbelle@gmail.com')
+			.where('email', req.user.email)
 			.sort('-createdAt');
 		
 			console.log('user: %s', '#{user.email}');
