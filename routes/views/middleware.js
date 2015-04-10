@@ -69,7 +69,7 @@ exports.requireUser = function(req, res, next) {
 		res.redirect('/keystone/signin');
 	} else {
 		
-		console.log('req-user:  %s', req.user);
+		//console.log('req-user:  %s', req.user);
 		console.log('req-user-email:  %s', req.user.email);
 		
 		next();
