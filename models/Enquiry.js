@@ -58,10 +58,15 @@ Enquiry.schema.methods.checkDoubleEnquiries = function(callback) {
 	var enquiry = this;
 	
 	console.log('Check 4 doubles - email: %s', req.user.email); // 2DO: req not known here !!! --> won't work
-	
+
+	// 2DO: search enquiries collection 4 doubles	
 	keystone.list('User').model.find().where('isAdmin', true).exec(function(err, admins) {
 		
 		if (err) return callback(err);
+		
+		// 2DO: Get all except last posted and change status of all except last
+		
+		
 		
 		new keystone.Email('enquiry-notification').send({
 			to: admins,
@@ -85,14 +90,9 @@ Enquiry.schema.methods.sendNotificationEmail = function(callback) {
 	
 	var enquiry = this;
 	
-	// 2DO: search enquiries collection 4 doubles
 	keystone.list('User').model.find().where('isAdmin', true).exec(function(err, admins) { 
 		
 		if (err) return callback(err);
-		
-		// 2DO: Get all except last posted and change status of all except last
-		
-		
 		
 		new keystone.Email('enquiry-notification').send({
 			to: admins,
