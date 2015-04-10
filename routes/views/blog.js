@@ -23,7 +23,7 @@ exports = module.exports = function(req, res) {
 	//var ses_email = req.body.email;
 	//var ses_email = req.body.userId;
 	var ses_email = req.user.email;
-	console.log('ses-email: %s', ses_email);
+	//console.log('ses-email: %s', ses_email);
 	/*
 	List.schema.pre('save', function(next, done) {
 			console.log('current user =>', this._user);
@@ -113,9 +113,6 @@ exports = module.exports = function(req, res) {
 			})
 			.where('email', req.user.email)
 			.sort('-createdAt');
-		
-			console.log('user: %s', '#{user.email}');
-			console.log('user: %s', '{user.email}');
 			
 //		if (locals.data.category) {
 //			q.where('categories').in([locals.data.category]);
