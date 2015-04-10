@@ -16,11 +16,11 @@ mixin post2(post)
 		
 block intro
 	.container-fluid
-		h1= data.category ? data.category.name : 'Inschrijvingen'
+		h1 Subscriptions
 
 block content
 	.container-fluid: .row
-		.col-sm-8.col-md-9
+		.col-sm-8.col-md-12
 			if filters.category && !data.category
 				h3.text-muted Invalid Category.
 			else
@@ -32,20 +32,20 @@ block content
 							strong #{data.posts.last}
 							|  of 
 							strong #{data.posts.total}
-							|  posts....
+							|  inschrijvingen....
 					else
 						h4.text-weight-normal Showing.... #{utils.plural(data.posts.results.length, '* post')}.
-					.blog
-						h5 Inschrijving
-						h5 #{user.email}
-						each post in data.posts.results
-							h3: p= post.enquiryType
-							h4: p= post.email
-							h4: p= post.phone
-							h4: p= post.createdAt
-							h4: p= post.message.md
-							h4: p= post.name.last
-							h4: p= post.name.first							
+							h5 User
+							h5 #{user.email}
+							table.table-bordered.table-striped
+								th.text-center.col-md-3 Activiteit
+								th.text-center.col-md-1 Phone
+								th.text-center.col-md-2 Creation Date 
+								each post in data.posts.results
+									tr
+										td= post.enquiryType
+										td= post.phone
+										td= post.createdAt
 					
 					if data.posts.totalPages > 1
 						ul.pagination
@@ -66,10 +66,3 @@ block content
 					else
 						h3.text-muted There are no posts yet.
 		
-		if data.categories.length
-			.col-sm-4.col-md-3
-				h2 Categories
-				.list-group(style='margin-top: 70px;')
-					a(href='/blog', class=!data.category ? 'active' : false).list-group-item All Categories
-					each cat in data.categories
-						a(href='/blog/' + cat.key, class=data.category && data.category.id == cat.id ? 'active' : false).list-group-item= cat.name
