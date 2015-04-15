@@ -17,21 +17,13 @@ Enquiry.add({
 	phone: { type: String },
 	estatus: { type: String, default: 'active', required: true},
 	enquiryType: { type: Types.Select, options: [
-		{ value: '2015-04-01-fysiek-zwembadtraining-lebbeke', label: '2015-04-01 - Fysiek Zwembadtraining Lebbeke' },
-		{ value: '2015-04-02-fysiek-zwembadtraining-lebbeke', label: '2015-04-02 - Fysiek Zwembadtraining Lebbeke' },		
-		{ value: '2015-04-03-fysiek-zwembadtraining-lebbeke', label: '2015-04-03 - Fysiek Zwembadtraining Lebbeke' },
-		{ value: '2015-04-04-fysiek-zwembadtraining-lebbeke', label: '2015-04-04 - Fysiek Zwembadtraining Lebbeke' },
 		{ value: '2014-01-01 - Fysiek - Zwembadtraining - Lebbeke', label: '2014-01-01 - Fysiek Zwembadtraining Lebbeke' },		
 		{ value: '2014-01-02 - Fysiek - Zwembadtraining - Lebbeke', label: '2014-01-02 - Fysiek Zwembadtraining Lebbeke' },
 		{ value: '2014-01-03 - Fysiek - Zwembadtraining - Lebbeke', label: '2014-01-03 - Fysiek Zwembadtraining Lebbeke' },		
-		{ value: 'mtl_2015-04-05', label: '2015-04-05 - Techniek Zwembadtraining Lebbeke' },
-		{ value: 'mtl_2015-04-06', label: '2015-04-06 - Techniek Zwembadtraining Lebbeke' },		
-		{ value: 'mtl_2015-04-07', label: '2015-04-07 - Techniek Zwembadtraining Lebbeke' },
-		{ value: 'mtw_2015-04-08', label: '2015-04-08 - Techniek Zwembadtraining Wachtebeke' },
-		{ value: 'mtw_2015-04-09', label: '2015-04-09 - Techniek Zwembadtraining Wachtebeke' },
-		{ value: 'mtw_2015-04-10', label: '2015-04-10 - Techniek Zwembadtraining Wachtebeke' },		
-		{ value: 'mtw_2015-04-11', label: '2015-04-11 - Techniek Zwembadtraining Wachtebeke' },
-		{ value: 'mtw_2015-04-12', label: '2015-04-12 - Techniek Zwembadtraining Wachtebeke' },
+		{ value: '2015-04-01 - Fysiek - Zwembadtraining - Lebbeke', label: '2015-04-01 - Fysiek Zwembadtraining Lebbeke' },
+		{ value: '2015-04-02 - Fysiek - Zwembadtraining - Lebbeke', label: '2015-04-02 - Fysiek Zwembadtraining Lebbeke' },		
+		{ value: '2015-04-03 - Fysiek - Zwembadtraining - Lebbeke', label: '2015-04-03 - Fysiek Zwembadtraining Lebbeke' },
+		{ value: '2015-04-04 - Fysiek - Zwembadtraining - Lebbeke', label: '2015-04-04 - Fysiek Zwembadtraining Lebbeke' },
 		{ value: 'other', label: 'Something else...' }
 	] },
 	message: { type: Types.Markdown, required: true },
@@ -40,12 +32,16 @@ Enquiry.add({
 
 Enquiry.schema.pre('save', function(next) {
 	this.wasNew = this.isNew;
+	
+	this.checkDoubleEnquiries();
+	
 	next();
 });
 
 Enquiry.schema.post('save', function() {
 	if (this.wasNew) {
-		this.sendNotificationEmail();
+		//this.sendNotificationEmail();
+		console.log('Nothing to report apart a post-save...');
 	}
 });
 
@@ -57,26 +53,43 @@ Enquiry.schema.methods.checkDoubleEnquiries = function(callback) {
 	
 	var enquiry = this;
 	
-	console.log('Check 4 doubles - email: %s', req.user.email); // 2DO: req not known here !!! --> won't work
-
 	// 2DO: search enquiries collection 4 doubles	
-	keystone.list('User').model.find().where('isAdmin', true).exec(function(err, admins) {
+	keystone.list('enquiries').model.find().where('email', 'elvanbelle@gmail.com').exec(function(err, enquiries_res) {
 		
 		if (err) return callback(err);
 		
 		// 2DO: Get all except last posted and change status of all except last
 		
+		enquiries_res.forEach(function(enquirie_res) {				
+				
+				console.log('result_enquiries type: %s - status: %s', enquirie_res.enquiryType, enquirie_res.estatus);
+				
+				/*
+				db.inventory.update(
+					{ category: "clothing" },
+					{
+						$set: { category: "apparel" },
+						$currentDate: { lastModified: true }
+					},
+					{ multi: true }
+					)
+				*/
+				
+				
+			});
 		
 		
-		new keystone.Email('enquiry-notification').send({
-			to: admins,
-			from: {
-				name: 'hvanbelle',
-				email: 'contact@hvanbelle.com'
-			},
-			subject: 'New Enquiry for hvanbelle',
-			enquiry: enquiry
-		}, callback);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//console.log('result_enquiries: %s', enquiries_res);
+		//console.log('result_enquiries type: %s', enquiries_res.enquiryType);
 		
 	});
 	
@@ -109,5 +122,5 @@ Enquiry.schema.methods.sendNotificationEmail = function(callback) {
 };
 
 Enquiry.defaultSort = '-createdAt';
-Enquiry.defaultColumns = 'name, email, enquiryType';
+Enquiry.defaultColumns = 'enquiryType|%30, name|20%, email|20%, estatus|10%';
 Enquiry.register();
