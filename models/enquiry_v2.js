@@ -54,7 +54,7 @@ Enquiry.schema.methods.checkDoubleEnquiries = function(callback) {
 	var enquiry = this;
 	
 	// 2DO: search enquiries collection 4 doubles	
-	keystone.list('enquiries').model.find().where('email', 'elvanbelle@gmail.com').exec(function(err, enquiries_res) {
+	keystone.list('enquiries').model.find().where('email', 'elvanbelle@gmail.com').where('estatus', 'active').exec(function(err, enquiries_res) {
 		
 		if (err) return callback(err);
 		
